@@ -16,6 +16,8 @@ const app =express();
 app.use("/api/auth",authRoutes)
 // for handling the requests and routes for the auth routes and redirects the auth routes to the authRoutes in the auth.route.js
 
+app.use(express.json());
+
 const PORT = process.env.PORT || 5001;
 app.listen(PORT,()=>
 {
@@ -23,4 +25,4 @@ app.listen(PORT,()=>
 console.log(`Server is running on port ${PORT}`)
 connectDB();
 })
-//this  will run the application on aa dedicated port number
+//this  will run the application on aa dedicated port number 
