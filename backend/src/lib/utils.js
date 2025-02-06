@@ -1,4 +1,8 @@
-import jwt from "jsonwebtoken"
+import dotenv from "dotenv";
+//import the dotenv for acesing the environment variables
+import jwt from "jsonwebtoken";
+dotenv.config();
+//configure the dot envimport jwt from "jsonwebtoken"
 
 export const generateToken =(userId,res)=>{
 
@@ -6,11 +10,11 @@ export const generateToken =(userId,res)=>{
         expiresIn:"7d"
     });
 
-    res.cookies("jwt",token,{
+    res.cookie("jwt",token,{
         maxAge: 7*24*60*60*1000,
         httpOnly:true,
         sameSite:"strict",
-        secure: process.env.NODE_ENV!==development
+        secure: process.env.NODE_ENV!=='development'
     });
 
     return token;

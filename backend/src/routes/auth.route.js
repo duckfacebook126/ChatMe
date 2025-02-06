@@ -6,7 +6,7 @@ import {login,signup,logout} from "../controllers/auth.controller.js"
 const router =express.Router();
  //assign the expressrouter function to a variable
 
-router.get("/signup",signup);
+router.post("/signup",signup);
 //sigup route handler
 router.get("/login",login);
 //login route handler

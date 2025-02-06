@@ -9,6 +9,12 @@ export const signup= async(req,res)=>{
 
      try {
 
+        if(!fullName||!email||!password)
+        {
+            return res.status(400).json({message:"all fileds are required"})
+
+        }
+
         if(password.length<6)
         {
             return res.status(400).json({message:"Password must be at least 6 characters"});
@@ -34,27 +40,57 @@ export const signup= async(req,res)=>{
 
         if(newUser){
             //generate the jwt token here
-            generateToken(newUser._id,res)
+            generateToken(newUser._id,res);
 
             await newUser.save();
+            //saved the created user in db
+            res.status(201).json({
+                _id:newUser._id,
+                fullName:newUser.fullName,
+                ProfilePic:newUser.ProfilePic
+            });
 
         }
 
         else{
-            res.status(400).json({message:"Invalid User data Data"})
+            res.status(400).json({message:"Invalid User data Data"});
         }
 
     }
 //    trying each signup usecase scenario 
     
     catch (error) {
+        console.log(error);
+        res.status(500).json({message:"Internal Server Error"});
         
     }
 }
 
-export const login=(req,res)=>{
-    res.send("login route");
+export const login=async(req,res)=>{
+    const {email,password}=req.body;
+try {
+    const user =await User.findOne({email});
+    if(!user)
+    {
+        return res.status(400).json({measage:"invalid credentilas"});
+    }
 
+    
+
+    const isPasswordCorrect=await bcrypt.compare(password,user.password);
+    if(isPasswordCorrect)
+    {
+
+    }
+
+    
+    
+
+} 
+
+catch (error) {
+    
+}
 }
 
 export const logout=(req,res)=>{

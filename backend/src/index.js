@@ -13,10 +13,13 @@ import {login,signup,logout} from "./controllers/auth.controller.js";
 const app =express();
 // using the express constructor and assigning it a value to the app variable
 
+app.use(express.json());
+//parsing the incoming json requests
+
 app.use("/api/auth",authRoutes)
 // for handling the requests and routes for the auth routes and redirects the auth routes to the authRoutes in the auth.route.js
 
-app.use(express.json());
+
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT,()=>
