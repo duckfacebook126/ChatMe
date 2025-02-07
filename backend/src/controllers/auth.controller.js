@@ -47,8 +47,9 @@ export const signup= async(req,res)=>{
             res.status(201).json({
                 _id:newUser._id,
                 fullName:newUser.fullName,
-                ProfilePic:newUser.ProfilePic
+                profilePic:newUser.profilePic
             });
+            //send the sucessful esponse back to the server with
 
         }
 
@@ -64,12 +65,16 @@ export const signup= async(req,res)=>{
         res.status(500).json({message:"Internal Server Error"});
         
     }
+    //print and send the errror  as the response
 }
 
 export const login=async(req,res)=>{
     const {email,password}=req.body;
 try {
+
     const user =await User.findOne({email});
+
+    
     if(!user)
     {
         return res.status(400).json({measage:"invalid credentilas"});
@@ -78,10 +83,22 @@ try {
     
 
     const isPasswordCorrect=await bcrypt.compare(password,user.password);
-    if(isPasswordCorrect)
-    {
+    //compare db and input password hashes and also retrn true if they match
 
+    if(!isPasswordCorrect)
+    {
+        res.status(400).json({message:"Invalid Credentials"});
     }
+
+    generateToken(user._id,res);
+    //will generate a cookie for the user
+
+    res.status(200).json({
+        _id:user._id,
+        fullName:user._fullName,
+        email:user.email,
+        profilePic:user.profilePic
+    })
 
     
     
@@ -89,13 +106,86 @@ try {
 } 
 
 catch (error) {
-    
+
+    console.log(error);
+
+    res.status(500).json({message:"Internal server Error"});
+
 }
+
+
 }
 
 export const logout=(req,res)=>{
-    res.send("logout route");
+
+try {
+res.cookie("jwt","",{maxAge:0});
+
+res.status(200).json({message:"Logged out Successfuly"});
+
+} 
+
+catch (error)
+ {
+
+    console.log(error);
+
+    res.status(500).json({message:"INternal Server Error"});
+    
+}
+
+
 
 }
+
+export const updateProfile=async(req,res)=>{
+    try {
+        
+        const{profilePic}=req.body;
+
+        const userId =req.user._id;
+
+        if(!profilePic)
+        {
+            return res.status(400).json({message:"Profile Pic is Required"});
+
+
+        }
+
+        const uploadResponse=await cloudinary.uploader.upload(profilePic);
+ 
+        const updatedUser = await User.findByIdAndUpdate(userId,{profilePic:uploadResponse.secure_url},{new:true});
+    } 
+    
+    catch (error) {
+
+        console.log("Error in the pic updating backend function:",error);
+
+
+        return res.status(500).json({message:"Internal Server Error "});
+
+
+
+    }
+
+}
+
+export const checkAuth= (req,res)=>
+{
+    try{
+
+        res.status(200).json(req.user);
+    }
+    
+    catch(error){
+        console.log("The error incheckAuth backend controller:",error);
+
+        return res.status(500).json({message:"INternal Server Error"});
+
+
+    }
+
+}
+
 
 //  function that will handle the signup logic when the person clicks on thesignup button

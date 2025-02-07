@@ -10,18 +10,23 @@ import {connectDB} from "./lib/db.js";
 
 import {login,signup,logout} from "./controllers/auth.controller.js";
 
+import cookieParser from "cookie-parser";
+
 const app =express();
 // using the express constructor and assigning it a value to the app variable
 
 app.use(express.json());
 //parsing the incoming json requests
 
+app.use(cookieParser());
+
 app.use("/api/auth",authRoutes)
 // for handling the requests and routes for the auth routes and redirects the auth routes to the authRoutes in the auth.route.js
 
 
 
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT ;
+
 app.listen(PORT,()=>
 {
 
