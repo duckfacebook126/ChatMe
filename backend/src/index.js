@@ -6,6 +6,10 @@ import express from "express";
 //creating an express object to initialize the app
 import authRoutes from "./routes/auth.route.js";
 //IMPORT THE AUTH ROUTES FROM THE auth.route.js
+
+import messageRoutes from "./routes/message.route.js";
+//message route imported from the message.route.js
+
 import {connectDB} from "./lib/db.js";
 
 import {login,signup,logout} from "./controllers/auth.controller.js";
@@ -22,6 +26,8 @@ app.use(cookieParser());
 
 app.use("/api/auth",authRoutes)
 // for handling the requests and routes for the auth routes and redirects the auth routes to the authRoutes in the auth.route.js
+
+app.use("/api/message",messageRoutes)
 
 
 
