@@ -1,5 +1,7 @@
 import User from "../models/user.model.js"
 import { generateToken } from "../lib/utils.js";
+
+
 //imiport the user model here
 import bcrypt from "bcryptjs"
 //import bcrypt here
@@ -36,7 +38,7 @@ export const signup= async(req,res)=>{
             email,
             password: hashedPassword
         })
-        //create new user document withh all the attributes from the req body using the user model
+        //create new user document withh all the attributes from the req body using the new user model Instance
 
         if(newUser){
             //generate the jwt token here
@@ -54,7 +56,7 @@ export const signup= async(req,res)=>{
         }
 
         else{
-            res.status(400).json({message:"Invalid User data Data"});
+            res.status(400).json({message:"Invalid User Data"});
         }
 
     }
@@ -91,7 +93,7 @@ try {
     }
 
     generateToken(user._id,res);
-    //will generate a cookie for the user
+    //will generate a cookie for the user with valid credentials
 
     res.status(200).json({
         _id:user._id,
@@ -99,6 +101,7 @@ try {
         email:user.email,
         profilePic:user.profilePic
     })
+//sending the response back to the frontend with the user data
 
     
     
@@ -119,7 +122,9 @@ catch (error) {
 export const logout=(req,res)=>{
 
 try {
+
 res.cookie("jwt","",{maxAge:0});
+//clear the cooie with the jwt token
 
 res.status(200).json({message:"Logged out Successfuly"});
 
@@ -130,7 +135,7 @@ catch (error)
 
     console.log(error);
 
-    res.status(500).json({message:"INternal Server Error"});
+    res.status(500).json({message:"Internal Server Error"});
     
 }
 
@@ -142,7 +147,7 @@ export const updateProfile=async(req,res)=>{
     try {
         
         const{profilePic}=req.body;
-
+            //get the profile pic from the req body
         const userId =req.user._id;
 
         if(!profilePic)
@@ -153,8 +158,10 @@ export const updateProfile=async(req,res)=>{
         }
 
         const uploadResponse=await cloudinary.uploader.upload(profilePic);
+        //upload prfile pic to cloudinary cloud
  
         const updatedUser = await User.findByIdAndUpdate(userId,{profilePic:uploadResponse.secure_url},{new:true});
+        //update the user profile pic in the db
     } 
     
     catch (error) {
