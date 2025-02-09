@@ -11,8 +11,7 @@ import messageRoutes from "./routes/message.route.js";
 //message route imported from the message.route.js
 
 import {connectDB} from "./lib/db.js";
-
-import {login,signup,logout} from "./controllers/auth.controller.js";
+//import thee db connection function to connect to the database
 
 import cookieParser from "cookie-parser";
 
@@ -24,10 +23,11 @@ app.use(express.json());
 
 app.use(cookieParser());
 
-app.use("/api/auth",authRoutes)
+app.use("/api/auth",authRoutes);
 // for handling the requests and routes for the auth routes and redirects the auth routes to the authRoutes in the auth.route.js
 
-app.use("/api/message",messageRoutes)
+app.use("/api/message",messageRoutes);
+//for handling the messages and related data
 
 
 
@@ -36,7 +36,7 @@ const PORT = process.env.PORT ;
 app.listen(PORT,()=>
 {
 
-console.log(`Server is running on port ${PORT}`)
+console.log(`Server is running on port ${PORT}`);
 connectDB();
-})
+});
 //this  will run the application on aa dedicated port number 

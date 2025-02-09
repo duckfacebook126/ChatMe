@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
 
+import User from "./user.model.js";
+
+
 const messageSchema =new mongoose.Schema(
 
     {
@@ -32,3 +35,5 @@ const messageSchema =new mongoose.Schema(
 const Message =mongoose.model("Message",messageSchema);
 
 export default Message;
+
+//message model for the users
