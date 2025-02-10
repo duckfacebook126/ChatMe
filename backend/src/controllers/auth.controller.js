@@ -185,7 +185,7 @@ export const checkAuth= (req,res)=>
     }
     
     catch(error){
-        console.log("The error incheckAuth backend controller:",error);
+        console.log("The error in checkAuth backend controller:",error);
 
         return res.status(500).json({message:"INternal Server Error"});
 
