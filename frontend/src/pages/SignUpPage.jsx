@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 const SignUpPage = () => {
 
 const [showPassword,setShowPassword] = useState(false);
+//showing password state
 
 const [formData,setFormData]=useState({
   fullName:"",
@@ -15,15 +16,21 @@ const [formData,setFormData]=useState({
   password:"",
 });
 
+//form data object
+
 const {signup,isSigningUp}=useAuthStore();
+//use the zustand auth store to manage the state
 
 const validateForm=()=>{}
+//function to vlaidate the form
 
 const handleSubmit=(e)=>{
 
   e.preventDefault();
 
 }
+
+// on clicking the submit button this function will be called
 
 
   return (
@@ -32,7 +39,7 @@ const handleSubmit=(e)=>{
 
       {/* left side */}
 
-      <div className="flex lfex-col justify-center items-center p-6 sm:p-12">
+      <div className="flex flex-col justify-center items-center p-6 sm:p-12">
 
         <div className="w-full max-w-md space-y-8">
           {/* Logo */}
@@ -122,7 +129,7 @@ const handleSubmit=(e)=>{
                    />
                    <button
                    type="button"
-                   className="absolute inset-y-0 right-0 pr-3 frlex items-center"
+                   className="absolute inset-y-0 right-0 pr-3 flex items-center"
                    onClick={()=>setShowPassword(!showPassword)}
                    >
                     {showPassword?(
