@@ -1,6 +1,6 @@
 import User from "../models/user.model.js"
 import { generateToken } from "../lib/utils.js";
-
+import cloudinary from "../lib/cloudinary.js";
 
 //imiport the user model here
 import bcrypt from "bcryptjs"
@@ -143,39 +143,33 @@ catch (error)
 
 }
 
-export const updateProfile=async(req,res)=>{
+export const updateProfile = async (req, res) => {
     try {
-        
-        const{profilePic}=req.body;
-            //get the profile pic from the req body
-        const userId =req.user._id;
+        const { profilePic } = req.body;
+        const userId = req.user._id;
 
-        if(!profilePic)
-        {
-            return res.status(400).json({message:"Profile Pic is Required"});
-
-
+        if (!profilePic) {
+            return res.status(400).json({ message: "Profile Pic is Required" });
         }
 
-        const uploadResponse=await cloudinary.uploader.upload(profilePic);
-        //upload prfile pic to cloudinary cloud
- 
-        const updatedUser = await User.findByIdAndUpdate(userId,{profilePic:uploadResponse.secure_url},{new:true});
-        //update the user profile pic in the db
-    } 
-    
-    catch (error) {
+        const uploadResponse = await cloudinary.uploader.upload(profilePic);
 
-        console.log("Error in the pic updating backend function:",error);
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { profilePic: uploadResponse.secure_url },
+            { new: true } // This is important to get the updated document
+        );
 
+        // ***THIS IS THE MISSING LINE***
+        res.status(200).json(updatedUser); // Send the updated user data back
 
-        return res.status(500).json({message:"Internal Server Error "});
-
-
-
+    } catch (error) {
+        console.error("Error in the pic updating backend function:", error);
+        return res.status(500).json({ message: "Internal Server Error" });
     }
+};
 
-}
+
 
 export const checkAuth= (req,res)=>
 {

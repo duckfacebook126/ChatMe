@@ -13,7 +13,7 @@ import authRoutes from "./routes/auth.route.js";
 
 import messageRoutes from "./routes/message.route.js";
 //message route imported from the message.route.js
-
+ 
 import {connectDB} from "./lib/db.js";
 //import thee db connection function to connect to the database
 
