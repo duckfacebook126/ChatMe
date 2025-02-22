@@ -139,6 +139,8 @@ catch (error)
     
 }
 
+// this will claer the cookie and logout the user
+
 
 
 }
@@ -153,6 +155,7 @@ export const updateProfile = async (req, res) => {
         }
 
         const uploadResponse = await cloudinary.uploader.upload(profilePic);
+        //this will upload the picture to the cloudinary
 
         const updatedUser = await User.findByIdAndUpdate(
             userId,
@@ -160,7 +163,8 @@ export const updateProfile = async (req, res) => {
             { new: true } // This is important to get the updated document
         );
 
-        // ***THIS IS THE MISSING LINE***
+
+        
         res.status(200).json(updatedUser); // Send the updated user data back
 
     } catch (error) {
@@ -168,6 +172,7 @@ export const updateProfile = async (req, res) => {
         return res.status(500).json({ message: "Internal Server Error" });
     }
 };
+// thsi will update the user profile
 
 
 
@@ -187,6 +192,4 @@ export const checkAuth= (req,res)=>
     }
 
 }
-
-
-//  function that will handle the signup logic when the person clicks on thesignup button
+//this wil check the auth of the laready logged user

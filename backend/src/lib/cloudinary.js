@@ -16,5 +16,8 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 
 
-})
+});
+
+//setting up the cloudinary  cloud using the credentials from the env files
+
 export default cloudinary;

@@ -1,5 +1,5 @@
 import mongoose from "mongoose"
-
+//create a user  mdoel that will deifine the user document structure and the user document atributes
 const userSchema = new  mongoose.Schema(
 
       {
@@ -35,4 +35,5 @@ const userSchema = new  mongoose.Schema(
 );
 
 const User = mongoose.model("User",userSchema);
+//User model basde on the user schema
 export default User;
