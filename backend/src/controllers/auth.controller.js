@@ -13,7 +13,7 @@ export const signup= async(req,res)=>{
 
         if(!fullName||!email||!password)
         {
-            return res.status(400).json({message:"all fileds are required"})
+            return res.status(400).json({message:"all fields are required"})
 
         }
 
@@ -79,7 +79,7 @@ try {
     
     if(!user)
     {
-        return res.status(400).json({measage:"invalid credentilas"});
+        return res.status(400).json({message:"invalid credentilas"});
     }
 
     
@@ -89,15 +89,15 @@ try {
 
     if(!isPasswordCorrect)
     {
-        res.status(400).json({message:"Invalid Credentials"});
+        return res.status(400).json({message:"Invalid Credentials"});
     }
 
     generateToken(user._id,res);
     //will generate a cookie for the user with valid credentials
 
-    res.status(200).json({
+    return res.status(200).json({
         _id:user._id,
-        fullName:user._fullName,
+        fullName:user.fullName,
         email:user.email,
         profilePic:user.profilePic
     })

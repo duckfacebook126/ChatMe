@@ -40,7 +40,7 @@ const App = () => {
   return (
    
 
-  <div data-theme="retro">
+  <div data-theme={theme}>
 
     <Navbar/>
 

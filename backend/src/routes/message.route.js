@@ -7,9 +7,9 @@ import { getUsersForSidebar,getMessages,sendMessage } from "../controllers/messa
 const router =express.Router();
 
 router.get("/users",protectRoute,getUsersForSidebar);
-
+// get all the users
 router.get("/:id",protectRoute,getMessages);
-
+//get all the messages from a specific user ID of that user
 router.post("/send/:id",protectRoute,sendMessage);
-
+//send all the messages to apecific user with an ID
 export default router;

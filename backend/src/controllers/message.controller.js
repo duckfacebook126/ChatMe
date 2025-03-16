@@ -1,4 +1,7 @@
 import Message from "../models/message.model.js";
+import User from "../models/user.model.js";
+import cloudinary from "../lib/cloudinary.js";
+
 //importing the message model
 export const getUsersForSidebar=async (req,res)=>
     
@@ -38,7 +41,7 @@ export const getMessages=async (req,res)=>
             //get the id of user to chat with from the paramaters
 
             const myId=req.user._id;
-            //get the id o fth elogged in user
+            //get the id of the logged in user
 
             const messages =await Message.find({
                 $or:[
@@ -46,11 +49,13 @@ export const getMessages=async (req,res)=>
                     {senderId:userToChatId,recieverId:myId}
                 ]
             });
-            //find th  mesages i the messages collection with sender and reciever Id,
-            //  or the reversed sender and reviever Id for messages of both sides 
+            //find the  mesages in the messages collection with sender and reciever Id,
+            //  or the reversed sender and receiver Id for messages of both sides 
 
 
-            res.status(200).json(messages);
+            return res.status(200).json(messages);
+
+            //send back ok response along withe the messages form the data base
             
         }
         
@@ -81,7 +86,7 @@ export const getMessages=async (req,res)=>
                if(image)
 
                {
-               const uploadResponse=await cloudinary.uploader.upload(profilePic);
+               const uploadResponse=await cloudinary.uploader.upload(image);
                //upload prfile pic to cloudinary cloud
                imageUrl =uploadResponse.secure_url;
                }
@@ -94,17 +99,22 @@ export const getMessages=async (req,res)=>
                 text,
                 image:imageUrl
                });
-                
+                ///above function will create and store  he new message document inside the database
               
                await newMessage.save();
 
+            
+
                //todo: realtime functionality using the Socket.io goes here
                
+                return res.status(201).json({newMessage});
+                //send new message stored inside the db as the response
                 
             } 
             
             catch (error) {
-                
+                console.log("Error in the send Message controller backend",error.message);
+
             }
 
         }

@@ -1,18 +1,25 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
+import {io} from "socket.io-client";
 
-export const useAuthStore = create((set) => ({
+const baseURL="http://localhost:5001";
+export const useAuthStore = create((set,get) => ({
     authUser: null,
     isSigningUp: false,
     isLoggingIn: false,
     isUpdatingProfile: false,
     isCheckingAuth: true,
+    onlineUsers:[],
+    sockect:null,
 
     checkAuth: async () => {
         try {
             const res = await axiosInstance.get("/auth/check");
             set({ authUser: res.data });
+            get().connectSocket();
+            //CONNECT TO THE SOCKET AFETR CHECKING AUTH afetr every rerender
+
         } catch (error) {
             set({ authUser: null });
             console.error("Auth check error:", error);
@@ -27,6 +34,8 @@ export const useAuthStore = create((set) => ({
             const res = await axiosInstance.post("/auth/signup", data);
             set({ authUser: res.data });
             toast.success("Account created successfully");
+            get().connectSocket();
+            //CONNECT TO SOCKECT AFETR SIGNUP
         } catch (error) {
             const errorMessage = error.response?.data?.message || "Signup failed";
             toast.error(errorMessage);
@@ -41,6 +50,9 @@ export const useAuthStore = create((set) => ({
             const res = await axiosInstance.post("/auth/login", data);
             set({ authUser: res.data });
             toast.success("Logged in successfully");
+
+            get().connectSocket();
+            //CONNECT TO THE SOCKET AFTER LOGING IN
         } catch (error) {
             const errorMessage = error.response?.data?.message || "Login failed";
             toast.error(errorMessage);
@@ -55,6 +67,8 @@ export const useAuthStore = create((set) => ({
             await axiosInstance.post("/auth/logout");
             set({ authUser: null });
             toast.success("Logged out successfully");
+            get().disconnectSocket();
+            //DISCONNECT THE SOCKET AFTER LOGOUT
         } catch (error) {
             const errorMessage = error.response?.data?.message || "Logout failed";
             toast.error(errorMessage);
@@ -86,8 +100,25 @@ export const useAuthStore = create((set) => ({
                 toast.error("An unexpected error occurred"); // Other error
             }
         } finally {
-            console.log("finally blck running");
+            console.log("finally block running");
             set({ isUpdatingProfile: false }); // *Crucially*, set loading to false in *finally*
         }
+    },
+    setSelectedUser:()=>set({selectedUser}),
+
+    connectSocket:()=>{
+        const{authUser}=get();
+        if(!authUser || get().socket?.connected) return;
+        const socket= io(baseURL);
+
+        socket.connect();
+        set({socket});
+    },
+
+
+    disconnectSocket:()=>{
+        if(get().socket?.connected) get().socket.disconnect();
+        //if sockect is connected only then only disconnect
     }
+
 }));
