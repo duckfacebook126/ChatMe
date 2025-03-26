@@ -92,7 +92,7 @@ const handleSubmit=(e)=>{
                     <User className="size-5 text-base-content/40"/>
                   </div>
                   <input 
-                  type="tetx"
+                  type="text"
                   className="input input-bordered w-full pl-10"
                   placeholder="John Doe"
                   value={formData.fullName}
